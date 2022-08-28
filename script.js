@@ -8,13 +8,14 @@
 
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
+var upperCaseLetters = arryFromLowToHigh(65, 90);
+var lowerCaseLetters = arryFromLowToHigh(97, 122);
+var numbers = arryFromLowToHigh(48, 57);
+var specialCharacters = arryFromLowToHigh(33, 47).concat(58, 64).concat(91, 96).concat(123, 126);
 
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-  
+function generatePassword() {
   var passLength = prompt('Choose a password length between 8 and 128 characters.');
+  console.log(passLength)
   if (passLength < 8 || passLength > 128) {
     alert("Invalid information. Please enter the correct information.")
   } else if (passLength === null) {
@@ -27,18 +28,52 @@ function writePassword() {
   }
 
   function characterSelect(){
-    var specialChar = confirm("Do you want special characters?");
-    if(specialChar === true){
 
+    var specialChar = confirm("Do you want to include special characters?");
+    if(specialChar === true){
+      return specialCharacters
     }
+    console.log(specialChar)
+
+    var numberSelect = prompt("Do you want to include numbers?")
+    if(numberSelect === true){
+      return numbers
+    }
+    console.log(numberSelect)
+
+    var upperChar = confirm("Do you want to inclued uppercase letters?")
+    if (upperChar === true){
+      return upperCaseLetters
+    }
+    console.log(upperChar)
+
+    var lowerChar = confirm("Do you want to include lowercase letters?")
+    if (lowerChar === true){
+      return lowerCaseLetters
+    }
+    console.log(lowerChar)
+    
   }
 
-  passwordText.value = password;
+ var charCodes = lowerChar
+ if (upperChar) charCodes = charCodes.concat(upperCaseLetters)
+ if (specialChar) charCodes = charCodes.concat(specialCharacters)
+ if (numberSelect) charCodes = charCodes.concat(numbers)
 
+ const passwordCharacters = []
+ for (var i = 0; i < passLength; i++){
+  const characters = charCodes[Math.floor(Math.random() * passLength)]
+  passwordCharacters.push(String.fromCharCode(characters))
+ }
+ return passwordCharacters
 }
 
-function generatePassword() {
-  String.fromCharCode(65) 
+// Write password to the #password input
+function writePassword() {
+  var password = generatePassword();
+  var passwordText = document.querySelector("#password");
+  passwordText.value = password;
+  
 }
 
 function arryFromLowToHigh(low, high){
