@@ -6,66 +6,86 @@
    6. password is generated that matches the selected criteria
    7.  password written to the page*/
 
-// Assignment Code
+// Assignment Code / char code const , array for pw holder and pw holder to set to HTML pg.
 var generateBtn = document.querySelector("#generate");
-var upperCaseLetters = arryFromLowToHigh(65, 90);
-var lowerCaseLetters = arryFromLowToHigh(97, 122);
-var numbers = arryFromLowToHigh(48, 57);
-var specialCharacters = arryFromLowToHigh(33, 47).concat(58, 64).concat(91, 96).concat(123, 126);
+const LOWERCASE_CHAR_CODES = arrayfromLowToHigh(97, 122);
+const UPPERCASE_CHAR_CODES = arrayfromLowToHigh(65, 90);
+const NUMBERS_CHAR_CODES = arrayfromLowToHigh(48, 57);
+const SYMBOL_CHAR_CODES = arrayfromLowToHigh(33, 47).concat(58, 64).concat(91, 96).concat(123, 126);
+let code = []
+var finalPass = []
+
+// Add event listener to generate button
+generateBtn.addEventListener("click", writePassword);
 
 function generatePassword() {
-  var passLength = prompt('Choose a password length between 8 and 128 characters.');
-  console.log(passLength)
-  if (passLength < 8 || passLength > 128) {
-    alert("Invalid information. Please enter the correct information.")
-  } else if (passLength === null) {
+
+  passReset();
+
+  // holds the character amount, keeps entry as num only , stops pw gen if the criteria is not met.
+  var passWordLength = prompt("How many characters do you want? Min-8 Max-128");
+  if (passWordLength < 8 || passWordLength > 128) {
+    alert("Please enter a valid number")
+  } else if (passWordLength === null) {
     alert('A password will not be generated.');
-  } else if (isNaN(passLength) === true || passLength === '') {
+  } else if (isNaN(passWordLength) === true || passWordLength === '') {
     alert('Please use numerical numbers and try again.');
-  }
-  else {
-    characterSelect()
-  }
-
-  function characterSelect(){
-
-    var specialChar = confirm("Do you want to include special characters?");
-    if(specialChar === true){
-      return specialCharacters
-    }
-    console.log(specialChar)
-
-    var numberSelect = prompt("Do you want to include numbers?")
-    if(numberSelect === true){
-      return numbers
-    }
-    console.log(numberSelect)
-
-    var upperChar = confirm("Do you want to inclued uppercase letters?")
-    if (upperChar === true){
-      return upperCaseLetters
-    }
-    console.log(upperChar)
-
-    var lowerChar = confirm("Do you want to include lowercase letters?")
-    if (lowerChar === true){
-      return lowerCaseLetters
-    }
-    console.log(lowerChar)
-    
+  } else {
+    selectedCharacters()
   }
 
- var charCodes = lowerChar
- if (upperChar) charCodes = charCodes.concat(upperCaseLetters)
- if (specialChar) charCodes = charCodes.concat(specialCharacters)
- if (numberSelect) charCodes = charCodes.concat(numbers)
+  // prompt specl. characters
+  function selectedCharacters() {
+    var specialYes = confirm('Click OK to include special characters in your password.');
+    if (specialYes === true) {
+      code = code.concat(SYMBOL_CHAR_CODES)
+    }
 
- const passwordCharacters = []
- for (var i = 0; i < passLength; i++){
-  const characters = charCodes[Math.floor(Math.random() * passLength)]
-  passwordCharacters.push(String.fromCharCode(characters))
- }
- return passwordCharacters
+    // prompt numbers
+    var numericYes = confirm('Click OK to include numerical characters in your password.');
+    if (numericYes === true) {
+      code = code.concat(NUMBERS_CHAR_CODES)
+    }
+
+    //  prompt lower caracters
+    var lowerYes = confirm('Click OK to include lowercase characters in your password.');
+    if (lowerYes === true) {
+      code = code.concat(LOWERCASE_CHAR_CODES)
+    }
+
+    // prompt upper characters
+    var upperYes = confirm('Click OK to include uppercase characters in your password.');
+    if (upperYes === true) {
+      code = code.concat(UPPERCASE_CHAR_CODES)
+    }
+
+    //stops PW gen. if no caracters are selected
+    if (upperYes === false && lowerYes === false && numericYes === false && specialYes === false) {
+      alert('You must select at least one character type.');
+    }
+  }
+
+  // looping through array for characters 
+  for (let i = 0; i < passWordLength; i++) {
+    var index = code[Math.floor(Math.random() * code.length)]
+    finalPass.push(String.fromCharCode(index))
+  }
+  return finalPass.join('')
+
+}
+
+function passReset() {
+  code.length = 0;
+  finalPass.length = 0;
+}
+
+// looping through numbers from char code chart and setting them to the const. at top of page.
+function arrayfromLowToHigh(low, high) {
+  const array = []
+  for (let i = low; i <= high; i++) {
+    array.push(i)
+  }
+  return array
 }
 
 // Write password to the #password input
@@ -73,17 +93,4 @@ function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
   passwordText.value = password;
-  
 }
-
-function arryFromLowToHigh(low, high){
-  const array = []
-  for (let i = low; i <= high; i++){
-    array.push(i)
-  }
-  return array
-}
-
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
-
