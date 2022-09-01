@@ -46,8 +46,9 @@ SOFTWARE.
 
 
 ## Screen Shot
-
+![Screenshot (5)](https://user-images.githubusercontent.com/110148234/187833372-94e6995a-e94c-4bfa-948a-72612d5e67bb.png)
 
 
 ## Link to work
 
+https://patl8822.github.io/password-generator/
